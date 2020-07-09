@@ -7,6 +7,17 @@ import bodyParser from 'body-parser';
 
 import { V0MODELS } from './controllers/v0/model.index';
 
+
+// values for aws
+
+//   "start": "node server.js",
+//   "main": "server.js",
+
+// values for local
+//   "main": "src/server.js",
+//     "start": "node .",
+
+
 (async () => {
   await sequelize.addModels(V0MODELS);
   await sequelize.sync();
