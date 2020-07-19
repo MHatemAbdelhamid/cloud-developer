@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles,checkUrl} from './util/util';
 
 (async () => {
 
@@ -29,6 +29,30 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+
+  app.get( "/filteredimage", async ( req, res ) => 
+  {
+      let {image_url}= req.query;
+      console.log(image_url);
+      const valid: boolean=await checkUrl(image_url);
+      if(!valid)
+      {
+        return res.status(422).send("Unprocessable entity");
+      }
+      const filteredImage:string=await filterImageFromURL(image_url);
+      res.status(200).sendFile(filteredImage,function (err)
+      {
+        if(err)
+        {
+          res.status(400).send('Cant access image');
+        }
+        else
+        {
+          deleteLocalFiles([filteredImage]);
+        }
+      })
+      
+  } );
   //! END @TODO1
   
   // Root Endpoint

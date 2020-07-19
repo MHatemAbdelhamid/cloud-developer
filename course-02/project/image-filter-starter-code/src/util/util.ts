@@ -1,5 +1,9 @@
 import fs from 'fs';
 import Jimp = require('jimp');
+import validUrl = require('valid-url');
+
+// import {filterImageFromURL, deleteLocalFiles} from './util/util';
+// var urlExists = require('url-exist');
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -21,7 +25,17 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
         });
     });
 }
+export async function checkUrl(url:string):Promise<boolean>{
+    if (url=="")
+        return false;
 
+        if (validUrl.isUri(url)){
+            return true;
+        } else {
+            return false;
+        }
+
+ }
 // deleteLocalFiles
 // helper function to delete files on the local disk
 // useful to cleanup after tasks
