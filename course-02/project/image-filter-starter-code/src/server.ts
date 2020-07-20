@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles,checkUrl} from './util/util';
 // "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
+import { Router, Request, Response } from 'express';
 
 (async () => {
 
@@ -31,16 +32,17 @@ import {filterImageFromURL, deleteLocalFiles,checkUrl} from './util/util';
   /**************************************************************************** */
 
 
-  app.get( "/filteredimage", async ( req, res ) => 
+  app.get( "/filteredimage", async ( req: Request, res: Response ) => 
   {
       let {image_url}= req.query;
-      console.log(image_url);
+      // console.log(image_url);
       const valid: boolean=await checkUrl(image_url);
       if(!valid)
       {
         return res.status(422).send("Unprocessable entity");
       }
       const filteredImage:string=await filterImageFromURL(image_url);
+
       res.status(200).sendFile(filteredImage,function (err)
       {
         if(err)
