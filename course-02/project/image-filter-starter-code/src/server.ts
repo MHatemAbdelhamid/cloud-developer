@@ -69,3 +69,17 @@ import {filterImageFromURL, deleteLocalFiles,checkUrl} from './util/util';
       console.log( `press CTRL+C to stop server` );
   } );
 })();
+
+
+// {
+//   "name": "udacity-c2-image-filter",
+//   "version": "1.0.0",
+//   "description": "",
+//   "main": "index.js",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1",
+//     "clean": "rm -rf www/ || true",
+//     "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www\\tmp && cd www && zip -r Archive.zip . && cd ..",
+//     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
+//     "start":"node server.js"
+//   },
