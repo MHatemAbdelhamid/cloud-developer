@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles,checkUrl} from './util/util';
+// "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
+import { Router, Request, Response } from 'express';
 
 (async () => {
 
@@ -29,6 +31,31 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+
+  app.get( "/filteredimage", async ( req: Request, res: Response ) => 
+  {
+      let {image_url}= req.query;
+      // console.log(image_url);
+      const valid: boolean=await checkUrl(image_url);
+      if(!valid)
+      {
+        return res.status(422).send("Unprocessable entity");
+      }
+      const filteredImage:string=await filterImageFromURL(image_url);
+
+      res.status(200).sendFile(filteredImage,function (err)
+      {
+        if(err)
+        {
+          res.status(400).send('Cant access image');
+        }
+        else
+        {
+          deleteLocalFiles([filteredImage]);
+        }
+      })
+      
+  } );
   //! END @TODO1
   
   // Root Endpoint
@@ -44,3 +71,17 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       console.log( `press CTRL+C to stop server` );
   } );
 })();
+
+
+// {
+//   "name": "udacity-c2-image-filter",
+//   "version": "1.0.0",
+//   "description": "",
+//   "main": "index.js",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1",
+//     "clean": "rm -rf www/ || true",
+//     "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www\\tmp && cd www && zip -r Archive.zip . && cd ..",
+//     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
+//     "start":"node server.js"
+//   },
